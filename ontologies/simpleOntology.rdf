@@ -1,0 +1,48 @@
+@prefix : <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology.rdf#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix simpleOntology: <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology.rdf#> .
+@base <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology.rdf> .
+
+<http://github.com/flosse/semanticExperiments/ontologies/simpleOntology.rdf> rdf:type rdf:Ontology .
+
+:actor rdf:type rdfs:Class ;    
+       rdfs:subClassOf rdf:Thing .
+
+:motor rdf:type rdfs:Class ;       
+       rdfs:subClassOf :actor .
+
+:sensor rdf:type rdfs:Class ;
+	rdf:ObjectProperty :hasUnit .
+
+:temperatureSensor rdf:type rdfs:Class ;                   
+                   rdfs:subClassOf :sensor .
+ 
+:lightSensor rdf:type rdfs:Class ;             
+             rdfs:subClassOf :sensor .
+    
+:unit rdf:type rdf:Class ;      
+      rdfs:subClassOf rdf:Thing .
+
+:temperatureUnit rdf:type rdfs:Class ;                 
+                 rdfs:subClassOf :unit .
+		 
+:celsius rdf:type rdfs:Class ;         
+         rdfs:subClassOf :temperatureUnit .
+	 
+:kelvin rdf:type rdfs:Class ;        
+        rdfs:subClassOf :temperatureUnit .
+
+:lightUnit rdf:type rdfs:Class ;           
+           rdfs:subClassOf :unit .
+
+:lumen rdf:type rdfs:Class ;       
+       rdfs:subClassOf :lightUnit .
+
+:lux rdf:type rdfs:Class ;     
+     rdfs:subClassOf :lightUnit .
+
+:candela rdf:type rdfs:Class ;         
+         rdfs:subClassOf :lightUnit .
+
+:hasUnit rdf:type rdf:ObjectProperty .
