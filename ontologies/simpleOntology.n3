@@ -1,10 +1,10 @@
-@prefix : <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology.rdf#> .
+@prefix : <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix simpleOntology: <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology.rdf#> .
-@base <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology.rdf> .
+@prefix so: <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#> .
+@base <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#> .
 
-<http://github.com/flosse/semanticExperiments/ontologies/simpleOntology.rdf> rdf:type rdf:Ontology .
+<http://github.com/flosse/semanticExperiments/ontologies/simpleOntology> rdf:type rdf:Ontology .
 
 :actor rdf:type rdfs:Class ;    
        rdfs:subClassOf rdf:Thing .
@@ -13,7 +13,8 @@
        rdfs:subClassOf :actor .
 
 :sensor rdf:type rdfs:Class ;
-	rdf:ObjectProperty :hasUnit .
+	rdf:ObjectProperty :hasUnit ;
+	rdf:comment "a device that measures a physical quantity" .
 
 :temperatureSensor rdf:type rdfs:Class ;                   
                    rdfs:subClassOf :sensor .
