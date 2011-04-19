@@ -6,44 +6,51 @@
 
 <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology> rdf:type rdf:Ontology .
 
-:actor rdf:type rdfs:Class ;    
-       rdfs:subClassOf rdf:Thing .
+:actuator rdf:type rdfs:Class ;
+	  rdfs:subClassOf rdf:Thing ;
+	  rdf:comment "a mechanical device for moving or controlling a mechanism or system" .
 
-:motor rdf:type rdfs:Class ;       
-       rdfs:subClassOf :actor .
+:motor rdf:type rdfs:Class ;
+       rdfs:subClassOf :actuator .
 
 :sensor rdf:type rdfs:Class ;
 	rdf:ObjectProperty :hasUnit ;
 	rdf:comment "a device that measures a physical quantity" .
 
-:temperatureSensor rdf:type rdfs:Class ;                   
+:temperatureSensor rdf:type rdfs:Class ;
                    rdfs:subClassOf :sensor .
  
-:lightSensor rdf:type rdfs:Class ;             
+:lightSensor rdf:type rdfs:Class ;
              rdfs:subClassOf :sensor .
-    
-:unit rdf:type rdf:Class ;      
-      rdfs:subClassOf rdf:Thing .
 
-:temperatureUnit rdf:type rdfs:Class ;                 
-                 rdfs:subClassOf :unit .
-		 
-:celsius rdf:type rdfs:Class ;         
-         rdfs:subClassOf :temperatureUnit .
+:unit rdf:type rdf:Property .
+
+:temperatureUnit rdf:type rdf:Property ;
+                 rdfs:subPropertyOf :unit .
+
+:celsius rdf:type rdf:Property ;
+         rdfs:subPropertyOf :temperatureUnit .
 	 
-:kelvin rdf:type rdfs:Class ;        
-        rdfs:subClassOf :temperatureUnit .
+:kelvin rdf:type rdf:Property ;
+        rdfs:subPropertyOf :temperatureUnit .
 
-:lightUnit rdf:type rdfs:Class ;           
-           rdfs:subClassOf :unit .
+:lightUnit rdf:type rdf:Property ;
+           rdfs:subPropertyOf :unit .
 
-:lumen rdf:type rdfs:Class ;       
-       rdfs:subClassOf :lightUnit .
+:lumen rdf:type rdf:Property ;
+       rdfs:subPropertyOf :lightUnit .
 
-:lux rdf:type rdfs:Class ;     
-     rdfs:subClassOf :lightUnit .
+:lux rdf:type rdf:Property ;
+     rdfs:subPropertyOf :lightUnit .
 
-:candela rdf:type rdfs:Class ;         
-         rdfs:subClassOf :lightUnit .
+:candela rdf:type rdf:Property ;
+         rdfs:subPropertyOf :lightUnit .
 
-:hasUnit rdf:type rdf:ObjectProperty .
+:hasUnit rdf:type rdf:Property .
+
+<tempSensor>	rdfs:Class	:sensor ;
+		:hastUnit	:celsius 
+.
+<lightSensor>	rdfs:Class	:sensor ;
+		:hastUnit	:lumen ;
+		rdf:comment 	"test" .
