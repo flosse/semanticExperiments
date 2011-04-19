@@ -9,6 +9,7 @@ The following software and tools are used:
 - [Protégé](http://protege.stanford.edu/)
 - [RDF Validator](http://www.rdfabout.com/demo/validator/)
 - [Arduino IDE](http://arduino.cc/en/Main/Software)
+- [Sesame](http://www.openrdf.org/)
 
 ## Interesting JavaScript libraries
 
