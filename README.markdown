@@ -13,17 +13,19 @@ The following software and tools are used:
 - [Sesame](http://www.openrdf.org/) - Semanitc Web Framwork for Java
 - [Jena](http://jena.sourceforge.net/) - Semanitc Web Framwork for Java
 - [rdfQuery](https://github.com/alohaeditor/rdfQuery) - Javascript library for RDF-related processing
+- [AgentOWL](http://agentowl.sourceforge.net/) - library for RDF/OWL support in [JADE](http://jade.tilab.com/)
 
 ## Interesting JavaScript libraries
 
 - [js3](https://github.com/webr3/js3) - generates RDF out of JavaScript values and objects
-- [Jstle](https://github.com/dnewcome/jstle)
+- [Jstle](https://github.com/dnewcome/jstle) - RDF serialization language
 - [jOWL](https://code.google.com/p/jowl-plugin/) - a jQuery plugin for processing OWL, MIT, 2009
 - [RDFAuthor](https://code.google.com/p/rdfauthor/), GPLv3, 2011
 - [rdf-parser](http://www.jibbering.com/rdf-parser/) - a simple RDF parser, 2006
-- [hercules](http://hercules.arielworks.net/)
-- [sparql.js](http://xmlarmyknife.org/js/sparql.js) - JS library for processing SPARQL queries
+- [hercules](http://hercules.arielworks.net/) - framework for semantic web applications
+- [sparql.js](http://www.thefigtrees.net/lee/sw/sparql.js) - JS library for processing SPARQL queries
 - [vie.js ](http://bergie.github.com/VIE/) - Library for making RDFa -annotated content on a web pages editable
+- [jquery-sparql](https://github.com/jgeldart/jquery-sparql) - a SPARQL jQuery plugin
 
 ### Graph visualization
 
@@ -36,6 +38,10 @@ The following software and tools are used:
 ## Weblinks
 
 - [RDF-JSON](http://docs.api.talis.com/platform-api/output-types/rdf-json)
+- [JQbus](http://svn.foaf-project.org/foaftown/jqbus/intro.html) - XMPP query services
+- [SPARQL By Example - A Tutorial](http://www.cambridgesemantics.com/2008/09/sparql-by-example/)
+- [Semantic web basics](http://www.linkeddatatools.com/semantic-web-basics)
+- [SPARQL implementations](http://www.w3.org/wiki/SparqlImplementations)
 
 ## Licence
 
