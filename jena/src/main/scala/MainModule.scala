@@ -25,6 +25,8 @@ object MainModule {
     addTriple( ns + "ExampleSensor","rdf:Class",":sensor")
     addTriple( ns + "ExampleSensor",":unit","celsius")
     searchForResources( "sensor" ).foreach( r => log.info( r ) )
+    
+    var ws = new WebServer( model )
 
   }
   
