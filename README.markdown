@@ -14,6 +14,8 @@ The following software and tools are used:
 - [Jena](http://jena.sourceforge.net/) - Semanitc Web Framwork for Java
 - [rdfQuery](https://github.com/alohaeditor/rdfQuery) - Javascript library for RDF-related processing
 - [AgentOWL](http://agentowl.sourceforge.net/) - library for RDF/OWL support in [JADE](http://jade.tilab.com/)
+- [Scala](http://www.scala-lang.org/) - Programming language for the JVM
+- [sbt](https://github.com/harrah/xsbt) - a build tool for Scala
 
 ## Interesting JavaScript libraries
 
@@ -35,6 +37,24 @@ The following software and tools are used:
 - [Protovis](http://vis.stanford.edu/protovis/)
 - [arbor.js](http://arborjs.org/)
 
+## Build
+
+For compiling JAR files [sbt](https://github.com/harrah/xsbt) is used.
+
+To install sbt globally on a Linux machine, copy the file `sbt-launch-0.7.4.jar` into
+the directory `/usr/local/lib/` and create the file `sbt` in the directory `/usr/bin/`
+with the following content:
+
+    java -Xmx1024M -XX:MaxPermSize=512M -jar /usr/local/lib/sbt-launch-0.7.4.jar "$@"
+
+Now make the script executable:
+
+    sudo chmod a+x sbt
+
+### API documentation
+
+**sbt** supports **scaladoc**, so just type `doc` to create the documentation.
+
 ## Weblinks
 
 - [RDF-JSON](http://docs.api.talis.com/platform-api/output-types/rdf-json)
@@ -44,6 +64,7 @@ The following software and tools are used:
 - [SPARQL implementations](http://www.w3.org/wiki/SparqlImplementations)
 - [Jena JavaDoc](http://jena.sourceforge.net/javadoc/index.html)
 - [Jena ARQ JavaDoc](http://jena.sourceforge.net/ARQ/javadoc/)
+- [Scala Style Guide](https://github.com/davetron5000/scala-style/)
 
 ## Licence
 
