@@ -42,6 +42,8 @@ The following software and tools are used:
 - [SPARQL By Example - A Tutorial](http://www.cambridgesemantics.com/2008/09/sparql-by-example/)
 - [Semantic web basics](http://www.linkeddatatools.com/semantic-web-basics)
 - [SPARQL implementations](http://www.w3.org/wiki/SparqlImplementations)
+- [Jena JavaDoc](http://jena.sourceforge.net/javadoc/index.html)
+- [Jena ARQ JavaDoc](http://jena.sourceforge.net/ARQ/javadoc/)
 
 ## Licence
 
