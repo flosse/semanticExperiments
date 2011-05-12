@@ -35,8 +35,12 @@ object helloSemanticWorld{
 
       println("sample quering...")
 
-      val queryString = "PREFIX so: <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#> " +
-      "SELECT ?sensor WHERE { ?sensor so:hastUnit so:celsius . }"
+      var textSearchString = "sensor"
+      val prefix = "PREFIX so: <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#> "
+      val select = "SELECT DISTINCT ?s "
+      val where = "WHERE { ?s ?p ?o . FILTER ( regex( str(?s) , \"(?i)" + textSearchString + "\" ) ) } " 
+      val order = "ORDER BY ?s"
+      val queryString = prefix + select + where + order
 
       println("SPARQL: " + queryString )
 
@@ -44,16 +48,16 @@ object helloSemanticWorld{
       val qexec = QueryExecutionFactory.create( query, model )
 
       try {
-	println("Result:")
-	val results = qexec.execSelect
-	while( results.hasNext ){
-	  val soln = results.nextSolution
-	  val x = soln.get("sensor")
-	  println( x )
-	}
+        println("Result:")
+        val results = qexec.execSelect
+        while( results.hasNext ){
+          val soln = results.nextSolution
+          val x = soln.get("s")
+          println( x )
+        }
       }catch{
-	  case e:Exception	=> println("error: "+ e )
-	  case _		=> println("something went wrong" )
+        case e:Exception	=> println("error: "+ e )
+        case _		=> println("something went wrong" )
       } finally { qexec.close }
     }
   }
