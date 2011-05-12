@@ -9,16 +9,22 @@ import java.io._
 import scala.io.Source
 import java.nio._
  
-class QueryHandler( model:Model ) extends HttpHandler {
+class OntologyHandler( model:Model, lang:String ) extends HttpHandler {
 
   def handle( exchange: HttpExchange ) {
 
       val writer = new BufferedWriter( new OutputStreamWriter( exchange.getResponseBody ) )
 
-      exchange.getResponseHeaders.put("Content-Type: ", List[String]( "text/n3") )
+      var mime:String = lang match {
+        case "N3"         =>  "text/n3"
+        case "RDF/XML"    =>  "application/rdf+xml"
+        case _            =>  "text"
+      }
+      
+      exchange.getResponseHeaders.put("Content-Type: ", List[String]( mime ) )
       exchange.sendResponseHeaders(200, 0)
       
-      model.write( writer, "N3" )
+      model.write( writer, lang )
 
       writer.flush
 
@@ -32,8 +38,9 @@ class WebServer( model:Model ){
   println("create WebServer")
 
   val server = HttpServer.create( new InetSocketAddress(6666), 10 )
-
-  server.createContext("/model", new QueryHandler(model) )
+  
+  server.createContext("/model/n3", new OntologyHandler( model, "N3" ) )
+  server.createContext("/model/rdf", new OntologyHandler( model, "RDF/XML" ) )
 
   server.start
 
