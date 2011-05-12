@@ -11,19 +11,24 @@ object MainModule {
 
   private val log:Log = LogFactory.getLog( this.getClass )
   private var queryModule : QueryModule = _
-  private val prefix = "PREFIX so: <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#>"
+  private var model: Model = _
+  private val ns = "http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#"
+  private val prefix = "PREFIX so: <" + ns + ">"
   
   def main( args:Array[String] ){
 
-    val model = loadRDFData( "../ontologies/simpleOntology.n3", createEmptyModel )
+    model = loadRDFData( "../ontologies/simpleOntology.n3", createEmptyModel )
 
     queryModule = new QueryModule( model )
     
-    search( "sensor" ).foreach( r => log.info( r ) )
+    searchForResources( "sensor" ).foreach( r => log.info( r ) )
+    addTriple( ns + "ExampleSensor","rdf:Class",":sensor")
+    addTriple( ns + "ExampleSensor",":unit","celsius")
+    searchForResources( "sensor" ).foreach( r => log.info( r ) )
 
   }
   
-  def search( text:String ):List[RDFNode] = {
+  def searchForResources( text:String ):List[RDFNode] = {
  
     try {
       log.debug("execute query")
@@ -32,6 +37,16 @@ object MainModule {
       case e:Exception	=> log.error("error: "+ e ); List() 
       case _           	=> log.error("something went wrong" ); List() 
     }
+  }
+ 
+  def addTriple( s:String, p:String, o:String ){
+
+    model.add( ResourceFactory.createStatement(
+        model.createResource(s),
+        model.createProperty(p),
+        model.createResource(o)
+      )
+    ) 
   }
   
   private def createEmptyModel = ModelFactory.createDefaultModel
