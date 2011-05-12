@@ -24,7 +24,12 @@ class OntologyHandler( model:Model, lang:String ) extends HttpHandler {
       exchange.getResponseHeaders.put("Content-Type: ", List[String]( mime ) )
       exchange.sendResponseHeaders(200, 0)
       
-      model.write( writer, lang )
+      try{
+        model.write( writer, lang )
+      }catch{   
+        case e:Exception  => writer.write("Error: Could not write model: " + e )
+        case _            => writer.write("Error: Could not write model" )
+      }
 
       writer.flush
 
