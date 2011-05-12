@@ -12,8 +12,10 @@ object MainModule {
   private val log:Log = LogFactory.getLog( this.getClass )
   private var queryModule : QueryModule = _
   private var model: Model = _
-  private val ns = "http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#"
-  private val prefix = "PREFIX so: <" + ns + ">"
+  private val soNS = "http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#"
+  private val prefix = "PREFIX so: <" + soNS + ">"
+  private val rdfNS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  private val rdfsNS = "http://www.w3.org/2000/01/rdf-schema#"
   
   def main( args:Array[String] ){
 
@@ -22,8 +24,8 @@ object MainModule {
     queryModule = new QueryModule( model )
     
     searchForResources( "sensor" ).foreach( r => log.info( r ) )
-    addTriple( ns + "ExampleSensor","rdf:Class",":sensor")
-    addTriple( ns + "ExampleSensor",":unit","celsius")
+    addTriple( soNS + "ExampleSensor", rdfsNS + "Class", soNS + "sensor")
+    addTriple( soNS + "ExampleSensor", soNS + "unit", soNS +"celsius")
     searchForResources( "sensor" ).foreach( r => log.info( r ) )
     
     var ws = new WebServer( model )
