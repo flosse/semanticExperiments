@@ -8,6 +8,6 @@ class default(info: ProjectInfo) extends DefaultProject(info) with AssemblyBuild
   val jena		= "com.hp.hpl.jena"	% "jena"		% "2.6.4"
   val arq		= "com.hp.hpl.jena"	% "arq"			% "2.8.8"
 
-  override def mainClass:Option[String] = Some("swe.helloSemanticWorld")
+  override def mainClass:Option[String] = Some("swe.MainModule")
 
 }
