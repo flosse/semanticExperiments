@@ -4,14 +4,14 @@ import com.hp.hpl.jena.rdf.model._
 import com.hp.hpl.jena.query._
 import org.apache.commons.logging._
 
-class QueryModule( model:Model ){
+class QueryModule( model:Model, prefix:String ){
 
   private val log:Log = LogFactory.getLog( this.getClass )
 
-  def searchForResources( prefix:String, searchText: String ):List[RDFNode] = 
+  def searchForResources( searchText: String ):List[RDFNode] = 
         resultSetToList( 
           QueryExecutionFactory.create( 
-            createQuery( searchText, prefix ), model 
+            createQuery( searchText ), model 
           ).execSelect 
         )
 
@@ -24,7 +24,7 @@ class QueryModule( model:Model ){
     list
   }
 
-  private def createQuery( searchText:String, prefix:String ) = {
+  private def createQuery( searchText:String ) = {
 
     log.debug("create query")
 

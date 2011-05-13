@@ -21,26 +21,13 @@ object MainModule {
 
     model = loadRDFData( "../ontologies/simpleOntology.n3", createEmptyModel )
 
-    queryModule = new QueryModule( model )
+    queryModule = new QueryModule( model, prefix )
     
-    searchForResources( "sensor" ).foreach( r => log.info( r ) )
     addTriple( soNS + "ExampleSensor", rdfsNS + "Class", soNS + "sensor")
     addTriple( soNS + "ExampleSensor", soNS + "unit", soNS +"celsius")
-    searchForResources( "sensor" ).foreach( r => log.info( r ) )
     
-    var ws = new WebServer( model )
+    var ws = new WebServer( model, queryModule )
 
-  }
-  
-  def searchForResources( text:String ):List[RDFNode] = {
- 
-    try {
-      log.debug("execute query")
-      queryModule.searchForResources( prefix, text )
-    }catch{
-      case e:Exception	=> log.error("error: "+ e ); List() 
-      case _           	=> log.error("something went wrong" ); List() 
-    }
   }
  
   def addTriple( s:String, p:String, o:String ){
@@ -57,7 +44,7 @@ object MainModule {
 
   private def loadRDFData( fileName:String, model:Model ):Model = {
 
-    log.debug("adding file content...")
+    log.debug("load rdf data")
 
     FileManager.get().open( fileName ) match {
 
@@ -71,7 +58,7 @@ object MainModule {
   private def loadFileIntoModel( in:InputStream, model:Model ):Model = {
     try{
       model.read( in, null, "N3" )
-      log.debug("content added")
+      log.debug("rdf data added successfully")
       model
     }catch{
       case e:Exception  => log.error( "error: " + e ); model
