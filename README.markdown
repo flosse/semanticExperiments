@@ -64,6 +64,7 @@ Now make the script executable:
 - [SPARQL implementations](http://www.w3.org/wiki/SparqlImplementations)
 - [Jena JavaDoc](http://jena.sourceforge.net/javadoc/index.html)
 - [Jena ARQ JavaDoc](http://jena.sourceforge.net/ARQ/javadoc/)
+- [Joseki](http://www.joseki.org/) - SPARQL Endpoint for Jena
 - [Scala Style Guide](https://github.com/davetron5000/scala-style/)
 
 ## Licence
