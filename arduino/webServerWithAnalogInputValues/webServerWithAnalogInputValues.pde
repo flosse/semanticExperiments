@@ -1,5 +1,5 @@
 /**
- * This arduino webserver serves the measured values of 
+ * This arduino webserver serves the measured values of
  * a photocell and of a humidity sensor.
  */
 #include <SPI.h>
@@ -19,19 +19,19 @@ int HUMIDITY_PIN = 1;
 /**
  * Start the web server.
  */
-void setup(){    
+void setup(){
   Serial.begin( 9600 ); // only used for debugging
   Ethernet.begin( mac, ip );
-  server.begin(); 
-  Serial.println( "Server started");
+  server.begin();
+  Serial.println( "Server started" );
 }
 
-/** 
+/**
  * Calculates the relative humidity.
- * Humidity RH =  ( ( V_OUT / V_CC ) - 0.16 )  / ( 0.0062 * ( 1.0546 - 0.00216 T ) ) 
+ * Humidity RH =  ( ( V_OUT / V_CC ) - 0.16 )  / ( 0.0062 * ( 1.0546 - 0.00216 T ) )
  */
-double calcRelHumidity( int val ){ 
-  return ( 0.00476 * val * 33.0278 ) - 25.73497; 
+double calcRelHumidity( int val ){
+  return ( 0.00476 * val * 33.0278 ) - 25.73497;
 }
 
 /**
@@ -61,8 +61,8 @@ double getRelHumidity(){
  * Sends the standard http response header.
  */
 void sendStandardResponseHeader( Client client ){
-  client.println("HTTP/1.1 200 OK");
-  client.println("Content-Type: text/html");
+  client.println( "HTTP/1.1 200 OK" );
+  client.println( "Content-Type: text/plain" );
   client.println();
 }
 
@@ -70,17 +70,14 @@ void sendStandardResponseHeader( Client client ){
  * Sends default response if no path was specified.
  */
 void sendStandardContent( Client client ){
-  
-  client.println("Available data:");
-  client.println("<br />");
-  client.println("<ul>");
-         
+
   String brightness = String( (int) getBrightness() );
-  String humidity = String( (int) getRelHumidity() );                 
-            
-  client.println("<li><a href='/humidity'>Brightness</a> = " + brightness + "%</li>");              
-  client.println("<li><a href='/brightness'>Humidity</a> = " + humidity + "%</li>");                                         
-  client.println("</ul>");  
+  String humidity = String( (int) getRelHumidity() );
+
+  client.print("brightness=" + brightness );
+  client.print("&");
+  client.print("humidity=" + humidity );
+  client.println();
 }
 
 /**
@@ -88,23 +85,23 @@ void sendStandardContent( Client client ){
  */
 String readRequest( Client client ){
 
-  boolean currentLineIsBlank = true; 
+  boolean currentLineIsBlank = true;
   String request = "";
 
   while( client.connected() ){
-    
+
     if( client.available() ){
-       
-      char c = client.read();      
+
+      char c = client.read();
 
       if( c == '\n' && currentLineIsBlank ){
         break;
-      }  
-      if( c == '\n' ){  
-        currentLineIsBlank = true; 
-      } 
+      }
+      if( c == '\n' ){
+        currentLineIsBlank = true;
+      }
       else if( c != '\r' ){
-        currentLineIsBlank = false; 
+        currentLineIsBlank = false;
       }
       request += c;
     }
@@ -121,7 +118,7 @@ void processRequest( Client client, String request ){
   Serial.println( request );
   // at the moment, just answer with default content
   sendStandardResponseHeader( client );
-  sendStandardContent( client );        
+  sendStandardContent( client );
   delay(1);      // give the browser time to receive the data
   client.stop(); // close connection:
 }
@@ -133,8 +130,8 @@ void loop()
 {
   // listen for incoming clients
   Client client = server.available();
-  
-  if( client ){  
+
+  if( client ){
     processRequest( client, readRequest( client ) );
-  }  
+  }
 }
