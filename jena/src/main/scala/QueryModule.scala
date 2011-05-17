@@ -11,27 +11,33 @@ class QueryModule( model:Model, prefix:String ){
   def searchForResources( searchText: String ):List[RDFNode] = 
         resultSetToList( 
           QueryExecutionFactory.create( 
-            createQuery( searchText ), model 
+            createResourceLookUpQuery( searchText ), model 
           ).execSelect 
         )
 
+  def getResourceProperties( resourceName:String ):List[RDFNode] = 
+        resultSetToList( 
+          QueryExecutionFactory.create( 
+            createResourcePropertiesQuery( resourceName ), model 
+          ).execSelect 
+        )
   private def resultSetToList( res:ResultSet ):List[RDFNode] = {
     var list = List[RDFNode]()
 
     while( res.hasNext ){
-      list = res.nextSolution.get( "s" ) :: list 
+      list = res.nextSolution.get( "x" ) :: list 
     }
     list
   }
 
-  private def createQuery( searchText:String ) = {
+  private def createResourceLookUpQuery( searchText:String ) = {
 
     log.debug("create query")
 
-    val select = " SELECT DISTINCT ?s "
+    val select = " SELECT DISTINCT ?x "
     val regex = "regex( str(?s) , \"(?i)" + searchText + "\" )"
-    val where = "WHERE { ?s ?p ?o . FILTER ( " + regex + " ) } "
-    val order = "ORDER BY ?s"
+    val where = "WHERE { ?x ?p ?o . FILTER ( " + regex + " ) } "
+    val order = "ORDER BY ?x"
     val queryString = prefix + select + where + order
 
     log.debug("Search for \"" + searchText + "\"" )
@@ -39,4 +45,17 @@ class QueryModule( model:Model, prefix:String ){
     QueryFactory.create( queryString )
   }
 
+  private def createResourcePropertiesQuery( resourceName:String ) = {
+
+    log.debug("create query")
+
+    val select = " SELECT DISTINCT ?x "
+    val where = "WHERE { " + resourceName + " ?x ?o } "
+    val order = "ORDER BY ?x"
+    val queryString = prefix + select + where + order
+
+    log.debug("Search for properties of " + resourceName )
+
+    QueryFactory.create( queryString )
+  }
 }

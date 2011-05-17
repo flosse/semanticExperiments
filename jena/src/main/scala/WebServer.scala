@@ -99,6 +99,8 @@ class OntologyHandler( model:Model, lang:String ) extends HttpHandler {
 class QueryHandler( queryModule:QueryModule ) extends HttpHandler {
 
   private val log:Log = LogFactory.getLog( this.getClass )
+  private val propVar = "resourcePropertiesOf"
+  private val resVar = "resourceName"
 
   def handle( exchange: HttpExchange ) {
 
@@ -111,8 +113,15 @@ class QueryHandler( queryModule:QueryModule ) extends HttpHandler {
       val uri = exchange.getRequestURI
 			val path = uri.getRawPath
 			val params = parseQuery( uri.getRawQuery )
-      queryModule.searchForResources( params("resourceName") )
-        .foreach( r => writer.write( r.toString + "\n" ) )
+      
+      if( params.contains( propVar ) ){
+        queryModule.getResourceProperties( params( propVar ) )
+          .foreach( r => writer.write( r.toString + "\n" ) )
+      }
+      if( params.contains( resVar ) ){
+        queryModule.searchForResources( params( resVar ) )
+          .foreach( r => writer.write( r.toString + "\n" ) )
+      }
     }catch{
       case e:Exception  => log.error("Error: Could not execute query: " + e )
       case _            => log.error("Error: Could not execute query" )
@@ -128,8 +137,7 @@ class QueryHandler( queryModule:QueryModule ) extends HttpHandler {
       .split("&")
       .map( _.split("=") )
       .filter( _.length == 2 )
-      .map( a => a(0) -> a(1) )
-      //.map( a => URLDecoder.decode( a, "UTF-8" ) )
+      .map( a => a(0) -> URLDecoder.decode( a(1), "UTF-8" ) )
       .toMap
 }
 
