@@ -43,6 +43,11 @@ button{
   color: #eee;
 }
 
+.banner h1{
+	font-size: 1.5em;
+	display: inline-block;
+}
+
 .content{    
   display:-webkit-box;
   display:-moz-box;

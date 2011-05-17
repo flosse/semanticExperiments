@@ -1,4 +1,4 @@
-swe.modules.rdfquery = swe.modules.rdfquery || (function( window, undefined ){
+swe.modules.simpleQuery = swe.modules.simpleQuery || (function( window, undefined ){
 
   var controller = function( sb ){
 
@@ -13,22 +13,21 @@ swe.modules.rdfquery = swe.modules.rdfquery || (function( window, undefined ){
 
       view = new sb.getView( "view" )( sb, model );
       view.init();
-
-      $.get("ontologies/simpleOntology.rdf", function( res ){
-	model.rdf = $.rdf().load(res, {});
-	model.results = [];
-	model.rdf
-	.prefix( "so", "http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#")
-	.prefix( "rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-	.prefix( "rdfs", "http://www.w3.org/2000/01/rdf-schema#")
-	.where("?s rdfs:Class ?b")
-	.each(function(){ 
-	  model.results.push( this.s.value.toString() );
-	});
-	model.notify();
-      });
-
+			sb.subscribe("cli/search", search );
+			search("")
     };
+
+		var search = function( searchTerm ){
+
+      $.ajax({
+					url: "query?resourceName=" + searchTerm, 
+					dataType: "text",
+					success: function( res ){
+						model.results = res.split(/\n/);
+						model.notify();	
+					}
+			});
+		}
 
     destroy = function(){
       delete view;
