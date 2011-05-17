@@ -14,8 +14,6 @@ object MainModule {
   private var model: Model = _
   private val soNS = "http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#"
   private val prefix = "PREFIX so: <" + soNS + ">"
-  private val rdfNS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  private val rdfsNS = "http://www.w3.org/2000/01/rdf-schema#"
   
   def main( args:Array[String] ){
 
@@ -23,22 +21,12 @@ object MainModule {
 
     queryModule = new QueryModule( model, prefix )
     
-    addTriple( soNS + "ExampleSensor", rdfsNS + "Class", soNS + "sensor")
-    addTriple( soNS + "ExampleSensor", soNS + "unit", soNS +"celsius")
-    
     var ws = new WebServer( model, queryModule )
+    var sl = new SemanticLifter( new Service( model ), "http://192.168.10.2" )
+    sl.start
 
   }
  
-  def addTriple( s:String, p:String, o:String ){
-
-    model.add( ResourceFactory.createStatement(
-        model.createResource(s),
-        model.createProperty(p),
-        model.createResource(o)
-      )
-    ) 
-  }
   
   private def createEmptyModel = ModelFactory.createDefaultModel
 
@@ -69,3 +57,21 @@ object MainModule {
   }
 
 }
+
+class Service( val model:Model ){
+
+  val rdfNS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  val rdfsNS = "http://www.w3.org/2000/01/rdf-schema#"
+
+  def addResourceTriple( s:String, p:String, o:String ){
+
+    model.add( ResourceFactory.createStatement(
+        model.createResource( s ),
+        model.createProperty( p ),
+        model.createResource( o )
+      )
+    ) 
+  }
+
+}
+
