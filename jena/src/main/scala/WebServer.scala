@@ -103,6 +103,7 @@ class QueryHandler( queryModule:QueryModule ) extends HttpHandler {
   private val log:Log = LogFactory.getLog( this.getClass )
   private val propVar = "resourcePropertiesOf"
   private val resVar = "resourceName"
+  private val ns = "http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#"
 
   def handle( exchange: HttpExchange ) {
 
@@ -124,7 +125,8 @@ class QueryHandler( queryModule:QueryModule ) extends HttpHandler {
 
       if( params.contains( resVar ) ){
         resultSetToList( queryModule.searchForResources( params( resVar ) ) )
-          .foreach( r => writer.write( r.toString + "\n" ) )
+          .map( r => r.toString.replace( ns, "so:" ) )
+          .foreach( r => writer.write( r + "\n" ) )
       }
     }catch{
       case e:Exception  => log.error("Error: Could not execute query: " + e )
