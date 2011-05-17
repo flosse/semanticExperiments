@@ -3,6 +3,8 @@ package swe
 import java.net._
 import com.sun.net.httpserver._
 import com.hp.hpl.jena.rdf.model._
+import com.hp.hpl.jena.query._
+import com.hp.hpl.jena.sparql.resultset._
 import scala.collection.JavaConversions._
 import java.io._
 import scala.io.Source
@@ -115,11 +117,13 @@ class QueryHandler( queryModule:QueryModule ) extends HttpHandler {
 			val params = parseQuery( uri.getRawQuery )
       
       if( params.contains( propVar ) ){
-        queryModule.getResourceProperties( params( propVar ) )
-          .foreach( r => writer.write( r.toString + "\n" ) )
+
+        queryModule.getResourceGraph( params( propVar ) )
+          .write( writer, "N3" )
       }
+
       if( params.contains( resVar ) ){
-        queryModule.searchForResources( params( resVar ) )
+        resultSetToList( queryModule.searchForResources( params( resVar ) ) )
           .foreach( r => writer.write( r.toString + "\n" ) )
       }
     }catch{
@@ -132,13 +136,25 @@ class QueryHandler( queryModule:QueryModule ) extends HttpHandler {
     exchange.close
   }
 
-  def parseQuery( query:String ):Map[String,String] =
+  private def parseQuery( query:String ):Map[String,String] =
     query
       .split("&")
       .map( _.split("=") )
       .filter( _.length == 2 )
-      .map( a => a(0) -> URLDecoder.decode( a(1), "UTF-8" ) )
+      .map( a => a(0) -> URLDecoder.decode( a(1) ) )
       .toMap
+
+  private def resultSetToList( res:ResultSet ):List[RDFNode] = {
+    var list = List[RDFNode]()
+
+    while( res.hasNext ){
+      var sol = res.nextSolution 
+      for( v <- res.getResultVars ){
+        list = sol.get( v ) :: list 
+      }  
+    }
+    list
+  }
 }
 
 class WebServer( model:Model, queryModule:QueryModule ){

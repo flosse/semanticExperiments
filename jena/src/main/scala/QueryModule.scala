@@ -3,41 +3,30 @@ package swe
 import com.hp.hpl.jena.rdf.model._
 import com.hp.hpl.jena.query._
 import org.apache.commons.logging._
+import scala.collection.JavaConversions._
 
 class QueryModule( model:Model, prefix:String ){
 
   private val log:Log = LogFactory.getLog( this.getClass )
 
-  def searchForResources( searchText: String ):List[RDFNode] = 
-        resultSetToList( 
-          QueryExecutionFactory.create( 
-            createResourceLookUpQuery( searchText ), model 
-          ).execSelect 
-        )
+  def searchForResources( searchText: String ):ResultSet = 
+    QueryExecutionFactory.create( 
+      createResourceLookUpQuery( searchText ), model 
+    ).execSelect 
 
-  def getResourceProperties( resourceName:String ):List[RDFNode] = 
-        resultSetToList( 
-          QueryExecutionFactory.create( 
-            createResourcePropertiesQuery( resourceName ), model 
-          ).execSelect 
-        )
-  private def resultSetToList( res:ResultSet ):List[RDFNode] = {
-    var list = List[RDFNode]()
-
-    while( res.hasNext ){
-      list = res.nextSolution.get( "x" ) :: list 
-    }
-    list
-  }
+  def getResourceGraph( resourceName:String ):Model = 
+    QueryExecutionFactory.create( 
+      createResourceGraphQuery( resourceName ), model 
+    ).execConstruct 
 
   private def createResourceLookUpQuery( searchText:String ) = {
 
     log.debug("create query")
 
-    val select = " SELECT DISTINCT ?x "
+    val select = " SELECT DISTINCT ?s "
     val regex = "regex( str(?s) , \"(?i)" + searchText + "\" )"
-    val where = "WHERE { ?x ?p ?o . FILTER ( " + regex + " ) } "
-    val order = "ORDER BY ?x"
+    val where = "WHERE { ?s ?p ?o . FILTER ( " + regex + " ) } "
+    val order = "ORDER BY ?s"
     val queryString = prefix + select + where + order
 
     log.debug("Search for \"" + searchText + "\"" )
@@ -45,14 +34,13 @@ class QueryModule( model:Model, prefix:String ){
     QueryFactory.create( queryString )
   }
 
-  private def createResourcePropertiesQuery( resourceName:String ) = {
+  private def createResourceGraphQuery( resourceName:String ) = {
 
-    log.debug("create query")
+    log.debug("create graph query")
 
-    val select = " SELECT DISTINCT ?x "
-    val where = "WHERE { " + resourceName + " ?x ?o } "
-    val order = "ORDER BY ?x"
-    val queryString = prefix + select + where + order
+    val construct = " CONSTRUCT { " + resourceName + " ?p ?o } "
+    val where = "WHERE { " + resourceName + " ?p ?o . } "
+    val queryString = prefix + construct + where
 
     log.debug("Search for properties of " + resourceName )
 
