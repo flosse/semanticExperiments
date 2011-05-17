@@ -59,7 +59,7 @@ class SemanticLifter( service:Service, address:String ) extends Actor {
       .split("&")
       .map( _.split("=") )
       .filter( _.length == 2 )
-      .map( a => a(0) -> a(1) )
+      .map( a => a(0) -> a(1).toString.trim )
       .toMap
 
   private def createTriple( dataMap:Map[String,String] ){
