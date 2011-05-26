@@ -35,6 +35,14 @@ button{
   cursor: pointer;    
 }
 
+table {
+	width: 98%;
+	font-size: 0.8em;
+	padding: 0.5em;
+}
+td{
+	padding: 0.5em;
+}
 .banner{
   padding: 0.8em;
   background: -webkit-gradient( linear, left top, left bottom, from(#666), to(#222));
@@ -137,7 +145,8 @@ button{
   background: -moz-linear-gradient(top, #bbb, #eee); 
 }
 
-.widget li.current{
+.widget li.current,
+.widget li.active{
   background: -webkit-gradient( linear, left top, left bottom, from(#eee), to(#bbb));
   background: -moz-linear-gradient(top, #eee, #bbb); 
   font-weight: bold;

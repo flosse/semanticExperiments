@@ -12,21 +12,18 @@ object MainModule {
   private val log:Log = LogFactory.getLog( this.getClass )
   private var queryModule : QueryModule = _
   private var model: Model = _
-  private val soNS = "http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#"
-  private val prefix = "PREFIX so: <" + soNS + ">"
   
   def main( args:Array[String] ){
 
     model = loadRDFData( "../ontologies/simpleOntology.n3", createEmptyModel )
 
-    queryModule = new QueryModule( model, prefix )
+    queryModule = new QueryModule( model )
     
-    var ws = new WebServer( model, queryModule )
-    var sl = new SemanticLifter( new Service( model ), "http://192.168.10.2" )
-    sl.start
+    var ws = new WebServer( model, queryModule, 8000 )
+    var µC = new µCLifter( new Service( model ), "http://192.168.10.2" )
+    µC.start
 
   }
- 
   
   private def createEmptyModel = ModelFactory.createDefaultModel
 

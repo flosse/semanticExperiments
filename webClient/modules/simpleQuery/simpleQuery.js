@@ -8,28 +8,58 @@ swe.modules.simpleQuery = swe.modules.simpleQuery || (function( window, undefine
     var init = function(){
 
       model = sb.getModel( "model" );
-      sb.mixin( model, sb.observable );
       model.subscribe( this );
 
       view = new sb.getView( "view" )( sb, model );
       view.init();
-			sb.subscribe("cli/search", search );
-			search("")
+			sb.subscribe("cli", onCli  );
+			sb.subscribe("filter", onFilter );
+			sb.subscribe("simpleQuery/select", onSelect )
     };
 
-		var search = function( searchTerm ){
+		var onCli = function( term ){
+			model.searchTerm = term;
+			search();
+		};
+
+		var onFilter = function( filter ){
+			model.filter = filter;
+			search();
+		};
+
+		var onSelect = function( id ){
+			model.selected = id 
+			model.notify();
+		}
+
+		var search = function(){
+
+			var param = {
+				resourceName: model.searchTerm,
+				classes: model.filter.classes.join(','),
+				properties: model.filter.properties.join(',')
+			};
 
       $.ajax({
-					url: "query?resourceName=" + searchTerm, 
+					url: "query?" + $.param( param ), 
 					dataType: "text",
 					success: function( res ){
-						model.results = res.split(/\n/);
+						model.results = parseResult( res )
 						model.notify();	
 					}
 			});
 		}
 
-    destroy = function(){
+		var parseResult = function( res ){
+
+			return $.map( res.split(/\n/), function( resource ){
+				return { string: resource, fragment: resource.split('#')[1] };
+			});
+		};
+	
+		var update = function(){};
+
+    var destroy = function(){
       delete view;
       delete model;
     };
@@ -37,13 +67,16 @@ swe.modules.simpleQuery = swe.modules.simpleQuery || (function( window, undefine
     // public API
     return ({
       init: init,
-      destroy: destroy
+      destroy: destroy,
+      update: update
     });
   };
 
   var model = {
-    rdf: undefined,
-    results: []
+		searchTerm: "",
+    results: [],
+		filter: {},
+		selected: ""
   };
 
   var view = function( sb, model ){
@@ -55,14 +88,18 @@ swe.modules.simpleQuery = swe.modules.simpleQuery || (function( window, undefine
     var update = function( ev ){ 
 
       c.empty();
-      sb.info( model.results )
-      sb.tmpl( tmpl, { results: model.results } ).appendTo( c );
+			sb.tmpl( tmpl, { results: model.results, selected: model.selected } ).appendTo( c );
     };
+
+		var select = function( ev ){
+			sb.publish("simpleQuery/select",$(this).attr('rel') )
+		}
 
     var init = function(){
       model.subscribe( this );
       tmpl = sb.getTemplate("result");
       c = sb.getContainer();
+			c.delegate("li", "click", select );
     };
 
     return ({ 

@@ -101,9 +101,6 @@ class OntologyHandler( model:Model, lang:String ) extends HttpHandler {
 class QueryHandler( queryModule:QueryModule ) extends HttpHandler {
 
   private val log:Log = LogFactory.getLog( this.getClass )
-  private val propVar = "resourcePropertiesOf"
-  private val resVar = "resourceName"
-  private val ns = "http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#"
 
   def handle( exchange: HttpExchange ) {
 
@@ -116,16 +113,40 @@ class QueryHandler( queryModule:QueryModule ) extends HttpHandler {
       val uri = exchange.getRequestURI
 			val path = uri.getRawPath
 			val params = parseQuery( uri.getRawQuery )
-      
-      if( params.contains( propVar ) ){
 
-        queryModule.getResourceGraph( params( propVar ) )
-          .write( writer, "N3" )
+      if( params.contains( "resourcePropertiesOf" ) ){
+
+        queryModule.getResourceGraphOf( params( "resourcePropertiesOf" ) )
+          .write( writer, "RDF/XML" )
+      }
+      if( params.contains( "getClasses" ) ){
+
+        resultSetToList( queryModule.searchForClasses )
+          //.map( r => r.toString.replace( ns, "so:" ) )
+          .map( _.toString )
+          .foreach( r => writer.write( r + "\n" ) )
       }
 
-      if( params.contains( resVar ) ){
-        resultSetToList( queryModule.searchForResources( params( resVar ) ) )
-          .map( r => r.toString.replace( ns, "so:" ) )
+      if( params.contains( "getProperties" ) ){
+
+        resultSetToList( queryModule.searchForProperties )
+          .map( _.toString )
+          .foreach( r => writer.write( r + "\n" ) )
+      }
+
+      if( params.contains( "resourceName" ) ){
+
+        log.debug( params );
+
+        resultSetToList(
+          queryModule.searchForResources(
+            params( "resourceName" ),
+            params( "classes" ).split(",").toList,
+            params( "properties" ).split(",").toList
+          ))
+
+          .map( _.toString )
+          .filter( _.contains("#") )
           .foreach( r => writer.write( r + "\n" ) )
       }
     }catch{
@@ -139,36 +160,107 @@ class QueryHandler( queryModule:QueryModule ) extends HttpHandler {
   }
 
   private def parseQuery( query:String ):Map[String,String] =
+
     query
       .split("&")
       .map( _.split("=") )
-      .filter( _.length == 2 )
-      .map( a => a(0) -> URLDecoder.decode( a(1) ) )
+      .map( _.map( s => URLDecoder.decode(s) ) )
+      .map( a => Array( a(0), if( a.length > 1 ) a(1) else "" ) )
+      .map( a => a(0) -> a(1) )
       .toMap
 
   private def resultSetToList( res:ResultSet ):List[RDFNode] = {
+
     var list = List[RDFNode]()
 
     while( res.hasNext ){
-      var sol = res.nextSolution 
+      var sol = res.nextSolution
       for( v <- res.getResultVars ){
-        list = sol.get( v ) :: list 
-      }  
+        list = sol.get( v ) :: list
+      }
     }
     list
   }
 }
 
-class WebServer( model:Model, queryModule:QueryModule ){
+class SparqlHandler( queryModule:QueryModule ) extends HttpHandler {
 
   private val log:Log = LogFactory.getLog( this.getClass )
 
-  val server = HttpServer.create( new InetSocketAddress(8000), 10 )
+  def handle( exchange: HttpExchange ) {
+
+    val writer = new BufferedWriter( new OutputStreamWriter( exchange.getResponseBody ) )
+
+    exchange.getResponseHeaders.put("Content-Type: ", List[String]( "text/plain" ) )
+    exchange.sendResponseHeaders(200, 0)
+
+    try{
+
+      val uri = exchange.getRequestURI
+      val path = uri.getRawPath
+      val params = parseQuery( uri.getRawQuery )
+      var query:String = params("query")
+
+      if( query.contains("SELECT ") ){
+
+        log.debug("execute " + query );
+
+        resultSetToList( queryModule.execSelect( query ) )
+          .map( _.toString )
+          .filter( _.contains("#") )
+          .foreach( r => writer.write( r + "\n" ) )
+
+      }
+      else if( query.contains("CONSTRUCT ")){
+
+        queryModule.execConstruct( query ).write( writer, "RDF/XML" )
+
+      }
+    }catch{
+      case e:Exception  => log.error("Error: Could not execute query: " + e )
+      case _            => log.error("Error: Could not execute query" )
+    }
+    writer.flush
+
+    exchange.close
+  }
+
+  private def parseQuery( query:String ):Map[String,String] =
+    query
+      .split("&")
+      .map( _.split("=") )
+      //.filter( _.length == 2 )
+      .map( _.map( s => URLDecoder.decode(s) ) )
+      .map( a => Array( a(0), if( a.length > 1 ) a(1) else "" ) )
+      .map( a => a(0) -> a(1) )
+      .toMap
+
+  private def resultSetToList( res:ResultSet ):List[RDFNode] = {
+
+    var list = List[RDFNode]()
+
+    while( res.hasNext ){
+      var sol = res.nextSolution
+      for( v <- res.getResultVars ){
+        list = sol.get( v ) :: list
+      }
+    }
+    list
+  }
+
+}
+
+class WebServer( model:Model, queryModule:QueryModule, port:Int ){
+
+  private val log:Log = LogFactory.getLog( this.getClass )
+
+  val server = HttpServer.create( new InetSocketAddress( port ), 10 )
 
   server.createContext("/", new FileHandler( "../webClient" ) )
   server.createContext("/model/n3", new OntologyHandler( model, "N3" ) )
   server.createContext("/model/rdf", new OntologyHandler( model, "RDF/XML" ) )
   server.createContext("/query", new QueryHandler( queryModule ) )
+  server.createContext("/sparql", new SparqlHandler( queryModule ) )
 
   server.start
   log.info("WebServer started")

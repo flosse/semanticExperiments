@@ -1,6 +1,6 @@
 <h3>Results</h3>
 <ul>
   {{each results}}
-    <li>${$value}</li>
+	<li rel="${$value.string}" {{if selected === $value.string }}class="current"{{/if}}>${$value.fragment}</li>
   {{/each}}
 </ul>

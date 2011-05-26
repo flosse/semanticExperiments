@@ -1,7 +1,6 @@
 @prefix : <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix so: <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#> .
 @base <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#> .
 
 <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology> rdf:type rdf:Ontology .
@@ -14,34 +13,31 @@
 			rdfs:subClassOf		:actuator .
 
 :sensor			rdf:type		rdfs:Class ;
-			rdf:ObjectProperty	:hasUnit ;
+			rdf:Property	:unit ;
 			rdf:comment		"a device that measures a physical quantity" .
 
 :temperatureSensor	rdf:type		rdfs:Class ;
-			rdfs:subClassOf		:sensor .
+			rdfs:subClassOf		:sensor ;
+			rdf:Property	:temperatureUnit .
 
 :lightSensor		rdf:type		rdfs:Class ;
-			rdfs:subClassOf		:sensor .
+			rdfs:subClassOf		:sensor ;
+			rdf:Property	:lightUnit .
 
 :unit			rdf:type		rdf:Property .
+
+:vendor		rdf:type		rdf:Property .
 
 :temperatureUnit	rdf:type		rdf:Property ;
 			rdfs:subPropertyOf	:unit .
 
-:celsius		rdf:type		rdf:Property ;
-			rdfs:subPropertyOf	:temperatureUnit .
-
-:kelvin			rdf:type		rdf:Property ;
-			rdfs:subPropertyOf	:temperatureUnit .
-
 :lightUnit		rdf:type		rdf:Property ;
 			rdfs:subPropertyOf	:unit .
 
-:lumen			rdf:type		rdf:Property ;
-			rdfs:subPropertyOf	:lightUnit .
+:hasComponent	rdf:type		rdf:Property .
 
-:lux			rdf:type		rdf:Property ;
-			rdfs:subPropertyOf	:lightUnit .
+:values		rdf:type		rdf:Property .
 
-:candela		rdf:type		rdf:Property ;
-			rdfs:subPropertyOf	:lightUnit .
+:picture		rdf:type		rdf:Property .
+
+:automationSystem	rdf:type	rdfs:Class .

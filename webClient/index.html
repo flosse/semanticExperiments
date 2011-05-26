@@ -11,6 +11,7 @@
 		<link type="text/css" rel="stylesheet" href="modules/rdfquery/rdfquery.css" />
 		<link type="text/css" rel="stylesheet" href="modules/simpleQuery/simpleQuery.css" />
 		<link type="text/css" rel="stylesheet" href="modules/cli/cli.css" />
+		<link type="text/css" rel="stylesheet" href="modules/filter/filter.css" />
 
 		<script type="text/javascript" src="lib/scaleApp.full.min.js"></script>
 
@@ -22,11 +23,14 @@
 		<script type="text/javascript" src="lib/jquery.rdf.js"></script>
 		<script type="text/javascript" src="lib/jquery.rdf.json.js"></script>
 		<script type="text/javascript" src="lib/jquery.rdf.xml.js"></script>
+		<script type="text/javascript" src="lib/jquery.url.js"></script>
 
 		<script type="text/javascript" src="swe.js"></script>
 		<script type="text/javascript" src="modules/rdfquery/rdfquery.js"></script>
 		<script type="text/javascript" src="modules/cli/cli.js"></script>
 		<script type="text/javascript" src="modules/simpleQuery/simpleQuery.js"></script>
+		<script type="text/javascript" src="modules/resourceInfo/resourceInfo.js"></script>
+		<script type="text/javascript" src="modules/filter/filter.js"></script>
 	</head>
 
 	<body>
@@ -35,12 +39,16 @@
 			<div id="cli" class="cli"></div>
 		</header>
 		<div class="content">
-			<aside class="left"></aside>
+			<aside class="left">
+				<div id="filter" class="filter"></div>
+			</aside>
 			<article>
 			<!-- <div id="rdfquery" class="rdfquery widget"></div> -->
 				<div id="simpleQuery" class="simpleQuery widget"></div>
 			</article>
-			<aside class="right"></aside>
+			<aside class="right">
+				<div id="resourceInfo" class="resourceInfo widget"></div>
+			</aside>
 		</div>
 	</body>
 

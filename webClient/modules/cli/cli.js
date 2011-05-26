@@ -32,7 +32,7 @@ swe.modules.cli = swe.modules.cli || (function( window, undefined ){
     };
 		
 		var update = function(){
-			sb.publish("cli/search", model.cmd );
+			sb.publish("cli", model.cmd );
 		}
 
     // public API
@@ -59,25 +59,17 @@ swe.modules.cli = swe.modules.cli || (function( window, undefined ){
     var cli;
     
     /**
-     * Function: update
-     */
-    var update = function( ev ){
-      cli.val( model.cmd );      
-    };
-    
-    /**
      * Function: onKeyUp
      */
     var onKeyUp = function( ev ){
 	  
       if( ev.which == '27' ){		// on escape
 				model.cmd = '';
-				model.notify();
+				cli.val( model.cmd );      
       }else{
 				model.cmd = $(this).val();
 				if( ev.which == '13' ){		// on enter
 					model.enterPressed = true;
-					model.notify();
 				}
       }
 			model.notify();
@@ -89,9 +81,6 @@ swe.modules.cli = swe.modules.cli || (function( window, undefined ){
     var init = function(){
 	
 				cli = sb.tmpl("cli", {} );
-	
-				model.subscribe( this );
-				
 				cli.appendTo( sb.getContainer() );
 				cli.attr("placeholder", sb._("placeholder"));
 				cli.keyup( onKeyUp );
@@ -100,7 +89,6 @@ swe.modules.cli = swe.modules.cli || (function( window, undefined ){
 
     return ({ 
       init: init, 
-      update: update       
     });     
     
   };

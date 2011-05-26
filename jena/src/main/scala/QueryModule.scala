@@ -5,45 +5,59 @@ import com.hp.hpl.jena.query._
 import org.apache.commons.logging._
 import scala.collection.JavaConversions._
 
-class QueryModule( model:Model, prefix:String ){
+class QueryModule( model:Model ){
 
   private val log:Log = LogFactory.getLog( this.getClass )
+  private val rdfsNS = "http://www.w3.org/2000/01/rdf-schema#"
+  private val rdfNS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 
-  def searchForResources( searchText: String ):ResultSet = 
-    QueryExecutionFactory.create( 
-      createResourceLookUpQuery( searchText ), model 
-    ).execSelect 
+  def searchForResources( searchText: String, classes:List[String], properties:List[String] ):ResultSet =
+    execSelect( resourceLookUpQuery( searchText, classes, properties ) )
 
-  def getResourceGraph( resourceName:String ):Model = 
-    QueryExecutionFactory.create( 
-      createResourceGraphQuery( resourceName ), model 
-    ).execConstruct 
+  def searchForClasses:ResultSet =
+    execSelect( classLookUpQuery )
 
-  private def createResourceLookUpQuery( searchText:String ) = {
+  def searchForProperties:ResultSet =
+    execSelect( propertyLookUpQuery )
 
-    log.debug("create query")
+  def getResourceGraphOf( resourceName:String ):Model =
+    execConstruct( resourceGraphQuery( resourceName ) )
 
-    val select = " SELECT DISTINCT ?s "
-    val regex = "regex( str(?s) , \"(?i)" + searchText + "\" )"
-    val where = "WHERE { ?s ?p ?o . FILTER ( " + regex + " ) } "
-    val order = "ORDER BY ?s"
-    val queryString = prefix + select + where + order
+  def execConstruct( query:String ):Model = QueryExecutionFactory
+    .create( QueryFactory.create( query ), model ).execConstruct
 
-    log.debug("Search for \"" + searchText + "\"" )
+  def execSelect( query:String ):ResultSet = QueryExecutionFactory
+    .create( QueryFactory.create( query ), model ).execSelect
 
-    QueryFactory.create( queryString )
+  private def resourceLookUpQuery( searchText:String, classes:List[String], properties:List[String] ) = {
+
+    val classFilter = classes
+      .filter( _!="")
+      .map( c => "?s <" + rdfsNS + "subClassOf> <" + c + "> .")
+
+    var filterString = ""
+
+    if( classFilter.length > 0 ){
+      filterString = " " + classFilter.reduceLeft( _ + "" + _) + " "
+    }
+
+    """ SELECT DISTINCT ?s
+    WHERE { ?s ?p ?o .""" + filterString +
+    """FILTER ( regex( str(?s) , "(?i)""" + searchText + """" )) }
+    ORDER BY ?s"""
   }
 
-  private def createResourceGraphQuery( resourceName:String ) = {
+  private val classLookUpQuery =
+    """ SELECT DISTINCT ?s
+    WHERE { ?s <""" + rdfNS + "type> <" + rdfsNS + """Class> . }
+    ORDER BY ?s"""
 
-    log.debug("create graph query")
+  private val propertyLookUpQuery =
+    """ SELECT DISTINCT ?s
+    WHERE { ?s <""" + rdfNS + "type> <" + rdfNS + """Property> . }
+    ORDER BY ?s"""
 
-    val construct = " CONSTRUCT { " + resourceName + " ?p ?o } "
-    val where = "WHERE { " + resourceName + " ?p ?o . } "
-    val queryString = prefix + construct + where
-
-    log.debug("Search for properties of " + resourceName )
-
-    QueryFactory.create( queryString )
-  }
+  private def resourceGraphQuery( resourceName:String ) =
+    " CONSTRUCT { " + resourceName + """ ?p ?o }
+    WHERE { """ + resourceName + " ?p ?o . }"
 }

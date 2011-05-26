@@ -22,8 +22,22 @@ var swe = swe || (function( window, undefined ){
 			templates: { result: "modules/simpleQuery/result.html" }
 		});
 
+		scaleApp.register("resourceInfo", swe.modules.resourceInfo.controller,{
+			models: { model: swe.modules.resourceInfo.model },
+			views: { view: swe.modules.resourceInfo.view },
+			templates: { result: "modules/resourceInfo/resourceInfo.html" }
+		});
+
+		scaleApp.register("filter", swe.modules.filter.controller,{
+			models: { model: swe.modules.filter.model },
+			views: { view: swe.modules.filter.view },
+			templates: { filter: "modules/filter/filter.html" }
+		});
+
 		scaleApp.start("cli");
 		scaleApp.start("simpleQuery");
+		scaleApp.start("resourceInfo");
+		scaleApp.start("filter");
 
 	};
 
