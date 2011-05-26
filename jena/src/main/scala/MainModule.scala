@@ -20,8 +20,6 @@ object MainModule {
     queryModule = new QueryModule( model )
     
     var ws = new WebServer( model, queryModule, 8000 )
-    var µC = new µCLifter( new Service( model ), "http://192.168.10.2" )
-    µC.start
 
   }
   
