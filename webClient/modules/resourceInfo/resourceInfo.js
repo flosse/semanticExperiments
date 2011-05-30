@@ -4,6 +4,8 @@ swe.modules.resourceInfo = swe.modules.resourceInfo || (function( window, undefi
 
     var model;
     var view;
+    var rdfsNS = "http://www.w3.org/2000/01/rdf-schema#"
+		var rdfNS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 
     var init = function(){
 
@@ -18,15 +20,20 @@ swe.modules.resourceInfo = swe.modules.resourceInfo || (function( window, undefi
     };
 
 		var search = function( resource ){
+			if( resource.trim !== "" ){
+				var sparql = "CONSTRUCT " +
+					"{ <" + resource + "> ?p ?o } " +
+					"WHERE { <" + resource + "> ?p ?o . }"
 
-      $.ajax({
-					url: "query?" + $.param( { resourcePropertiesOf: "<" + resource + ">" } ), 
-					dataType: "text",
-					success: function( res ){
-						model.results = parseRDF( res );
-						model.notify();	
-					}
-			});
+				$.ajax({
+						url: "sparql?" + $.param( { query: sparql } ), 
+						dataType: "text",
+						success: function( res ){
+							model.results = parseRDF( res );
+							model.notify();	
+						}
+				});
+			}
 		};
 		
 		var parseRDF = function( res ){

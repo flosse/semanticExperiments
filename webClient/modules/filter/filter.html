@@ -1,0 +1,16 @@
+<div class="widget">
+<h3>Classes</h3>
+<ul class="classes">
+  {{each classesAvailable}}
+		<li rel="${$index}" {{if classesSelected[ $index ] }}class="active"{{/if}}>${$value}</li>
+  {{/each}}
+</ul>
+</div>
+<div class="widget">
+<h3>Properties</h3>
+<ul class="properties">
+  {{each propertiesAvailable}}
+		<li rel="${$index}" {{if propertiesSelected[ $index ] }}class="active"{{/if}}>${$value}</li>
+  {{/each}}
+</ul>
+</div>

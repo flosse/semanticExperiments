@@ -4,6 +4,8 @@ swe.modules.simpleQuery = swe.modules.simpleQuery || (function( window, undefine
 
     var model;
     var view;
+    var rdfsNS = "http://www.w3.org/2000/01/rdf-schema#"
+		var rdfNS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 
     var init = function(){
 
@@ -34,14 +36,17 @@ swe.modules.simpleQuery = swe.modules.simpleQuery || (function( window, undefine
 
 		var search = function(){
 
-			var param = {
-				resourceName: model.searchTerm,
-				classes: model.filter.classes.join(','),
-				properties: model.filter.properties.join(',')
-			};
+			var classes = $.map( model.filter.classes, function( c, i ){
+					return "?s <"+ rdfsNS + "subClassOf> <" + c + "> ." 
+				}).join( " " )
+
+			var sparql = "SELECT DISTINCT ?s " +
+				"WHERE { ?s ?p ?o . " + classes + " " +
+				"FILTER ( regex( str(?s) , '(?i)" + model.searchTerm + "' ) ) } " +
+				"ORDER BY ?s";
 
       $.ajax({
-					url: "query?" + $.param( param ), 
+					url: "sparql?" + $.param({ query: sparql }), 
 					dataType: "text",
 					success: function( res ){
 						model.results = parseResult( res )
@@ -75,7 +80,10 @@ swe.modules.simpleQuery = swe.modules.simpleQuery || (function( window, undefine
   var model = {
 		searchTerm: "",
     results: [],
-		filter: {},
+		filter: {
+			classes:[],
+			properties:[]
+		},
 		selected: ""
   };
 
