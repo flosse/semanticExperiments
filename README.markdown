@@ -2,17 +2,46 @@
 
 This repository contains some code of my experiments with semantic web technologies.
 
+## Overview
+
+The following architecture is used at the moment.
+
+ ![ Architecture overview ]( https://github.com/flosse/semanticExperiments/raw/master/overview.png )
+
+### Origins
+
+These are the sources where the raw data comes from. This could be an OPCServer
+an XML file or a microcontroller.
+
+### Lifter
+
+The lifters know their data source and transform the raw data into semantic data.
+Each lifter can act as an agent or as a standalone program.
+
+### Backend
+
+The backend provides a service layer that can be used by the lifters to push
+semantic data into the global model. It also provides a SPARQL interface for the
+webClient. As a basic framework Jena is used at the moment but e.g. sesame could
+do the same job. Like the lifters the backend can be started in a standalone mode
+or as an agent.
+
+### WebClient
+
+The webClient privides an search interface for the user. The search can be stated
+more precisely by using filters.
+
 ## Software & Tools
 
 The following software and tools are used:
 
-- [Protégé](http://protege.stanford.edu/) - OWL-Editor
 - [W3C RDF Validator](http://www.w3.org/RDF/Validator/)
 - [rdf:about RDF Validator](http://www.rdfabout.com/demo/validator/)
 - [Arduino IDE](http://arduino.cc/en/Main/Software) - IDE for programming arduino µControllers
 - [Sesame](http://www.openrdf.org/) - Semanitc Web Framwork for Java
 - [Jena](http://jena.sourceforge.net/) - Semanitc Web Framwork for Java
 - [rdfQuery](https://github.com/alohaeditor/rdfQuery) - Javascript library for RDF-related processing
+- [JADE](http://jade.tilab.com/) - Agent platform
 - [AgentOWL](http://agentowl.sourceforge.net/) - library for RDF/OWL support in [JADE](http://jade.tilab.com/)
 - [Scala](http://www.scala-lang.org/) - Programming language for the JVM
 - [sbt](https://github.com/harrah/xsbt) - a build tool for Scala
@@ -57,6 +86,7 @@ Now make the script executable:
 
 ## Weblinks
 
+- [Protégé](http://protege.stanford.edu/) - OWL-Editor
 - [RDF-JSON](http://docs.api.talis.com/platform-api/output-types/rdf-json)
 - [JQbus](http://svn.foaf-project.org/foaftown/jqbus/intro.html) - XMPP query services
 - [SPARQL By Example - A Tutorial](http://www.cambridgesemantics.com/2008/09/sparql-by-example/)

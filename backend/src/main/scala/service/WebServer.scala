@@ -18,7 +18,7 @@ class WebServer( backend:Backend, port:Int ){
   private val log:Log = LogFactory.getLog( this.getClass )
   private val server = HttpServer.create( new InetSocketAddress( port ), 10 )
 
-  server.createContext("/", new FileHandler( "../webClient" ) )
+  server.createContext("/", new FileHandler( "webClient" ) )
   server.createContext("/model/n3", new OntologyHandler( backend, "N3" ) )
   server.createContext("/model/rdf", new OntologyHandler( backend, "RDF/XML" ) ) 
   server.createContext("/sparql", new SparqlHandler( backend ) )

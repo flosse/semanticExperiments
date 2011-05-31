@@ -12,7 +12,7 @@ import org.apache.commons.logging._
 
 import scala.actors._
 
-object ArduinoLifter extends App {
+class ArduinoLifterModule {
 
   private val log:Log = LogFactory.getLog( this.getClass )
 
