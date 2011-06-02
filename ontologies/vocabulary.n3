@@ -1,0 +1,53 @@
+@prefix : <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@base <http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#> .
+
+:                     rdf:type              rdf:Ontology .
+
+### Classes ###
+
+:actuator             rdf:type              rdfs:Class ;
+                      rdfs:subClassOf       rdf:Thing ;
+                      rdf:comment           "a mechanical device for moving or controlling a mechanism or system" .
+
+:motor                rdf:type              rdfs:Class ;
+                      rdfs:subClassOf       :actuator .
+
+:sensor               rdf:type              rdfs:Class ;
+                      rdf:Property          :unit ;
+                      rdf:comment           "a device that measures a physical quantity" .
+
+:temperatureSensor    rdf:type              rdfs:Class ;
+                      rdfs:subClassOf       :sensor ;
+                      rdf:Property          :temperatureUnit .
+
+:lightSensor          rdf:type              rdfs:Class ;
+                      rdfs:subClassOf       :sensor ;
+                      rdf:Property          :lightUnit .
+
+:automationSystem     rdf:type              rdfs:Class .
+
+:lightBarrier         rdf:type              rdfs:Class ;
+                      rdfs:subClassOf       :sensor .
+
+:conveyorBelt         rdf:type              rdfs:Class ;
+                      rdfs:subClassOf       :actuator .
+
+### Properties ###
+
+:unit                 rdf:type              rdf:Property .
+
+:vendor               rdf:type              rdf:Property .
+
+:temperatureUnit      rdf:type              rdf:Property ;
+                      rdfs:subPropertyOf    :unit .
+
+:lightUnit            rdf:type              rdf:Property ;
+                      rdfs:subPropertyOf    :unit .
+
+:hasComponent         rdf:type              rdf:Property .
+
+:values               rdf:type              rdf:Property .
+
+:image                rdf:type              rdf:Property .

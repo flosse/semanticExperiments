@@ -83,32 +83,36 @@ Now make the script executable:
 To build a project change to the according directory and type `sbt` to reach the
 sbt promt. To compile the source just type
 
-		> compile
+    > compile
 
 Or if you want compile on every change use
 
-		> ~compile 
+    > ~compile
 
 With `run` you start the compiled program and with `assembly` you can create a
-JAR file with all dependencies included. 
+JAR file with all dependencies included.
 
 #### IntelliJ IDEA
 
-To use scala with IntelliJ install the sbt-idea-plugin as processor and execute 
+To use scala with IntelliJ install the sbt-idea-plugin as processor and execute
 `idea` to create IDEA project files:
 
-		> *sbtIdeaRepo at http://mpeltonen.github.com/maven/
-		> *idea is com.github.mpeltonen sbt-idea-processor 0.1-SNAPSHOT
+    > *sbtIdeaRepo at http://mpeltonen.github.com/maven/
+    > *idea is com.github.mpeltonen sbt-idea-processor 0.1-SNAPSHOT
 
-		> update
+    > update
 
-		> idea
+    > idea
 
 Install the Scala plugin in IntelliJ and have fun!
 
 #### Eclipse
 
-See http://www.scala-ide.org/
+Run `sbt` and generate the eclipse project and classpath file with
+
+    > eclipse
+
+For more information have a look at http://www.scala-ide.org/ and https://github.com/musk/SbtEclipsify
 
 ### API documentation
 
