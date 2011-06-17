@@ -8,6 +8,10 @@ import java.util._
 import org.apache.commons.logging._
 import org.apache.log4j._
 
+import org.apache.http.client._
+import org.apache.http.client.methods._
+import org.apache.http.impl.client._
+
 import org.opcfoundation.ua.builtintypes._
 import org.opcfoundation.ua.common._
 import org.opcfoundation.ua.core._
@@ -23,7 +27,7 @@ import com.prosysopc.ua.nodes._
 import scala.collection.JavaConversions._
 import scala.actors._
 
-object OPCLifter extends App{
+class OPCLifterModule{
 
   private val log:Log = LogFactory.getLog( this.getClass )
 
@@ -35,6 +39,18 @@ object OPCLifter extends App{
 	private val validator = new PkiFileBasedCertificateValidator
   private val appDescription = createAppDescription
 	private val identity = createAppIdentity( appDescription )
+
+  private val ns = "http://github.com/flosse/semanticExperiments/ontologies/simpleOntology#"
+  private val rdfsNS = "http://www.w3.org/2000/01/rdf-schema#"
+  private val rdfNS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+
+  private val sysName     = ns + "ExampleOPCAutomationSystem"
+  private val switchName  = ns + "ExampleSwitch"
+  private val switchValName  = ns + "ExampleSwitchValues"
+  private val sliderName   = ns + "ExampleSlider"
+  private val sliderValName   = ns + "ExampleSliderValues"
+
+  private val rdfAddress        = "http://localhost:8000/"
 
 	log.debug("Setup OPC client ..." )
   setupClient
@@ -88,13 +104,33 @@ object OPCLifter extends App{
     var ns = nt.getIndex("http://" + url + "/" + addressSpaceName )
 
     val mySwitchNodeId = new NodeId( ns, "MySwitch")
-    val mySwitchData = client.readValue( mySwitchNodeId )
-    log.debug("Status of MySwitch: " + mySwitchData.getValue )
+    val mySliderNodeId = new NodeId( ns, "MyNumber")
 
-    val myNumberNodeId = new NodeId( ns, "MyNumber")
-    val myNumberData = client.readValue( myNumberNodeId )
-    log.debug("Status of MyNumber: " + myNumberData.getValue )
+    var mySliderData:Int = 0
+    var mySwitchData:Boolean = false 
+    
+    addBasicInformations
 
+    val reader =  new Actor{
+  
+      def act{ loop {
+
+      // switch
+      mySwitchData = client.readValue( mySwitchNodeId ).getValue.booleanValue
+      log.debug("Status of the switch: " + mySwitchData )
+      addLiteralTriple( switchValName, rdfNS + "_" + (new Date).getTime , mySwitchData.toString )
+
+      // slider
+      mySliderData = client.readValue( mySliderNodeId ).getValue.intValue
+      log.debug("Status of the slider: " + mySliderData )
+      addLiteralTriple( sliderValName, rdfNS + "_" + (new Date).getTime , mySliderData.toString )
+
+        Thread.sleep( 5000 )
+
+      }}
+    }          
+    
+    reader.start
   }
 
   private def printNameSpaces( nt: NamespaceTable ) {
@@ -117,6 +153,47 @@ object OPCLifter extends App{
 			}
     }
 	}
+
+  private def addBasicInformations{
+
+    // add sytem info
+    addResourceTriple( sysName,       rdfsNS + "subClassOf",  ns + "automationSystem"    )
+    addResourceTriple( sysName,       ns + "hasComponent",    switchName     )
+    addResourceTriple( sysName,       ns + "hasComponent",    sliderName     )
+
+    // add slider sensor informations
+    addResourceTriple( sliderName,     rdfsNS + "subClassOf", ns + "sensor"  )
+    addResourceTriple( sliderName,     ns + "values",         sliderValName  )
+    addResourceTriple( sliderValName,  rdfNS + "type",        rdfNS + "Seq"  )
+
+    // add switch sensor informations
+    addResourceTriple( switchName,     rdfsNS + "subClassOf", ns + "sensor"  )
+    addResourceTriple( switchName,     ns + "values",         switchValName  )
+    addResourceTriple( switchValName,  rdfNS + "type",        rdfNS + "Seq"  )
+  }                   
+
+ private def addResourceTriple( s:String, p:String, o:String ){
+   execQuery( rdfAddress + "add/ResourceStatement?" + getParams( s, p, o ) )
+ }
+
+ private def getParams( s:String, p:String, o:String ):String =
+  "subject=" + URLEncoder.encode( s ) +
+  "&predicate=" + URLEncoder.encode( p ) +
+  "&object=" + URLEncoder.encode( o ) 
+
+ private def execQuery( address:String ){
+    try{
+      new DefaultHttpClient execute( new HttpGet( address ), new BasicResponseHandler )
+    }catch{
+      case e:Exception  => log.warn( e.getMessage )
+      case _            => log.error( "something went wrong" )
+    }
+ }
+
+ private def addLiteralTriple( s:String, p:String, o:String ){
+   execQuery( rdfAddress + "add/LiteralStatement?" + getParams( s, p, o ) )
+ }
+
 }
 
 

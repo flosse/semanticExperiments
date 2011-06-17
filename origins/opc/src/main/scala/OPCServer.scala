@@ -6,6 +6,9 @@ import java.security.cert._
 import java.util._
 import java.util.concurrent._
 
+import scala.actors._
+import scala.util.Random
+
 import org.apache.commons.logging._
 import org.apache.log4j._
 
@@ -38,7 +41,7 @@ object OPCServer extends App{
 
   log.debug( "setup server ..." )
   setupServer
-  
+
   log.debug( "init server ..." )
   initServer
 
@@ -61,14 +64,14 @@ object OPCServer extends App{
     appDescription
   }
 
-  private def createAppIdentity( appDescription:ApplicationDescription ) = 
+  private def createAppIdentity( appDescription:ApplicationDescription ) =
     ApplicationIdentity
-      .loadOrCreateCertificate( 
-        appDescription, 
+      .loadOrCreateCertificate(
+        appDescription,
         "Semantic Experiments",
         null,
         new File( validator.getBaseDir, "private" )
-        ,true 
+        ,true
       )
 
   private def setupServer {
@@ -95,7 +98,7 @@ object OPCServer extends App{
   def addValidationListener{
 
     validator.setValidationListener( new CertificateValidationListener() {
-      def onValidate( 
+      def onValidate(
           certificate:Cert,
           applicationDescription:ApplicationDescription,
           passedChecks:EnumSet[CertificateCheck]
@@ -118,22 +121,23 @@ object OPCServer extends App{
 
     val ns = myNodeManager.getNamespaceIndex
 
-    val objectsFolder = server.getNodeManagerRoot.getObjectsFolder
-    val baseObjectType = server.getNodeManagerRoot.getType( Identifiers.BaseObjectType )
-    val baseDataVariableType = server.getNodeManagerRoot.getType( Identifiers.BaseDataVariableType )
-
-    var myObjectsFolderId = new NodeId( ns, "MyObjectsFolder" )
-    var myObjectsFolder = new FolderType( myNodeManager, myObjectsFolderId, "MyObjects", Locale.ENGLISH )
-    myNodeManager.addNodeAndReference( objectsFolder, myObjectsFolder, Identifiers.Organizes )
-
     var mySwitch = new PlainVariable[Boolean](myNodeManager, new NodeId( ns, "MySwitch") , "MySwitch", Locale.ENGLISH )
     mySwitch.setCurrentValue( false )
     myNodeManager.addNode( mySwitch )
-    
+
     var number = new PlainVariable[Int]( myNodeManager, new NodeId( ns, "MyNumber"), "MyNumber", Locale.ENGLISH )
     number.setCurrentValue( 13 )
     myNodeManager.addNode( number )
 
+    var simulator = new Actor{
+      def act{ loop{
+        mySwitch.setCurrentValue( Random.nextBoolean  )
+        number.setCurrentValue( Random.nextInt )
+
+        Thread.sleep( 6000 )
+      } }
+    }
+    simulator.start
   }
 
   private def addObjectFolder{

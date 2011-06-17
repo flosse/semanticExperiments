@@ -5,7 +5,7 @@ swe.modules.filter = swe.modules.filter || (function( window, undefined ){
     var model;
     var view;
     var rdfsNS = "http://www.w3.org/2000/01/rdf-schema#"
-		var rdfNS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    var rdfNS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 
     var init = function(){
 
@@ -13,67 +13,67 @@ swe.modules.filter = swe.modules.filter || (function( window, undefined ){
       model.subscribe( this );
       view = new sb.getView( "view" )( sb, model );
       view.init();
-			search();
-			sb.subscribe("cli", search );
+      search();
+      sb.subscribe("cli", search );
     };
 
-		var search = function(){
-			searchForClasses()
-			searchForProperties()
-		}
+    var search = function(){
+      searchForClasses()
+      searchForProperties()
+    }
 
-		var searchForClasses = function(){
+    var searchForClasses = function(){
 
-			var sparql = "SELECT DISTINCT ?s " +
-				"WHERE { ?s <" + rdfNS + "type> <"+ rdfsNS + "Class> . } " +
-				"ORDER BY ?s";
-
-      $.ajax({
-					url: "sparql?" + $.param({ query: sparql }), 
-					dataType: "text",
-					success: function( res ){
-						model.classesAvailable = parseResult( res );
-						model.notify();	
-					}
-			});
-		}
-
-		var searchForProperties = function(){
-
-			var sparql = "SELECT DISTINCT ?s " +
-				"WHERE { ?s <" + rdfNS + "type> <"+ rdfNS + "Property> . } " +
-				"ORDER BY ?s";
+      var sparql = "SELECT DISTINCT ?s " +
+        "WHERE { ?s <" + rdfNS + "type> <"+ rdfsNS + "Class> . } " +
+        "ORDER BY ?s";
 
       $.ajax({
-					url: "sparql?" + $.param({ query: sparql }), 
-					dataType: "text",
-					success: function( res ){
-						model.propertiesAvailable = parseResult( res ); 
-						model.notify();	
-					}
-			});
-		};
+          url: "sparql?" + $.param({ query: sparql }),
+          dataType: "text",
+          success: function( res ){
+            model.classesAvailable = parseResult( res );
+            model.notify();
+          }
+      });
+    }
 
-		var parseResult = function( res ){
+    var searchForProperties = function(){
 
-			var results = {};
+      var sparql = "SELECT DISTINCT ?s " +
+        "WHERE { ?s <" + rdfNS + "type> <"+ rdfNS + "Property> . } " +
+        "ORDER BY ?s";
 
-			$.each( res.split(/\n/), function( i, resource ){
-					results[ resource ] = resource.split('#')[1];
-			});
-			return results;
-		};
+      $.ajax({
+          url: "sparql?" + $.param({ query: sparql }),
+          dataType: "text",
+          success: function( res ){
+            model.propertiesAvailable = parseResult( res );
+            model.notify();
+          }
+      });
+    };
 
-		var update = function(){
-			sb.publish("filter", {
-				classes : obj2arr( model.classesSelected ),
-				properties : obj2arr( model.propertiesSelected )
-			});
-		};                                           
+    var parseResult = function( res ){
 
-		var obj2arr = function( obj ){
-			return $.map( obj, function( val ){ return val });
-		};
+      var results = {};
+
+      $.each( res.split(/\n/), function( i, resource ){
+          results[ resource ] = resource.split('#')[1];
+      });
+      return results;
+    };
+
+    var update = function(){
+      sb.publish("filter", {
+        classes : obj2arr( model.classesSelected ),
+        properties : obj2arr( model.propertiesSelected )
+      });
+    };
+
+    var obj2arr = function( obj ){
+      return $.map( obj, function( val ){ return val });
+    };
 
     var destroy = function(){
       delete view;
@@ -88,19 +88,19 @@ swe.modules.filter = swe.modules.filter || (function( window, undefined ){
     });
   };
 
-  var model = { 
-		classesAvailable:{},
-		classesSelected:{},
-		propertiesAvailable:{},
-		propertiesSelected:{}
-	};
+  var model = {
+    classesAvailable:{},
+    classesSelected:{},
+    propertiesAvailable:{},
+    propertiesSelected:{}
+  };
 
   var view = function( sb, model ){
 
     var c;
     var tmpl;
 
-    var update = function( ev ){ 
+    var update = function( ev ){
 
       c.empty();
       sb.tmpl( tmpl, model ).appendTo( c );
@@ -110,33 +110,33 @@ swe.modules.filter = swe.modules.filter || (function( window, undefined ){
       model.subscribe( this );
       tmpl = sb.getTemplate("filter");
       c = sb.getContainer();
-			c.delegate(".classes li", "click", toggleClass );
-			c.delegate(".properties li", "click", toggleProperty );
-			update();
+      c.delegate(".classes li", "click", toggleClass );
+      c.delegate(".properties li", "click", toggleProperty );
+      update();
     };
 
-		var toggleClass = function( ev ){
-			toggle( model.classesSelected, $(this).attr('rel') ); 
-			model.notify();
-		};
+    var toggleClass = function( ev ){
+      toggle( model.classesSelected, $(this).attr('rel') );
+      model.notify();
+    };
 
-		var toggleProperty = function( ev ){
-			toggle( model.propertiesSelected, $(this).attr('rel') ); 
-			model.notify();
-		};
+    var toggleProperty = function( ev ){
+      toggle( model.propertiesSelected, $(this).attr('rel') );
+      model.notify();
+    };
 
-		var toggle = function( obj, id ){
+    var toggle = function( obj, id ){
 
-			if( obj[ id ] ){
-				delete obj[ id ];
-			}else{
-				obj[ id ] = id;
-			}
+      if( obj[ id ] ){
+        delete obj[ id ];
+      }else{
+        obj[ id ] = id;
+      }
 
-		};
+    };
 
-    return ({ 
-      init: init, 
+    return ({
+      init: init,
       update: update
     });
 
