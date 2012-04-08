@@ -70,9 +70,22 @@ The following software and tools are used:
 - [Protovis](http://vis.stanford.edu/protovis/)
 - [arbor.js](http://arborjs.org/)
 
-### Interesting Sites
+## Weblinks
 
+- [Protégé](http://protege.stanford.edu/) - OWL-Editor
+- [RDF-JSON](http://docs.api.talis.com/platform-api/output-types/rdf-json)
+- [JQbus](http://svn.foaf-project.org/foaftown/jqbus/intro.html) - XMPP query services
+- [SPARQL By Example - A Tutorial](http://www.cambridgesemantics.com/2008/09/sparql-by-example/)
+- [Semantic web basics](http://www.linkeddatatools.com/semantic-web-basics)
+- [SPARQL implementations](http://www.w3.org/wiki/SparqlImplementations)
+- [Jena JavaDoc](http://jena.sourceforge.net/javadoc/index.html)
+- [Jena ARQ JavaDoc](http://jena.sourceforge.net/ARQ/javadoc/)
+- [Joseki](http://www.joseki.org/) - SPARQL Endpoint for Jena
+- [Scala Style Guide](https://github.com/davetron5000/scala-style/)
 - [Strategies for Building Semantic Web Applications](http://notes.3kbo.com/)
+- http://semanticweb.com/
+- [SemanticOverflow](http://answers.semanticweb.com/)
+- [Where can I learn about the semantic web](http://answers.semanticweb.com/questions/1/where-can-i-learn-about-the-semantic-web)
 
 ## Build
 
@@ -125,19 +138,6 @@ For more information have a look at http://www.scala-ide.org/ and https://github
 ### API documentation
 
 **sbt** supports **scaladoc**, so just type `doc` to create the documentation.
-
-## Weblinks
-
-- [Protégé](http://protege.stanford.edu/) - OWL-Editor
-- [RDF-JSON](http://docs.api.talis.com/platform-api/output-types/rdf-json)
-- [JQbus](http://svn.foaf-project.org/foaftown/jqbus/intro.html) - XMPP query services
-- [SPARQL By Example - A Tutorial](http://www.cambridgesemantics.com/2008/09/sparql-by-example/)
-- [Semantic web basics](http://www.linkeddatatools.com/semantic-web-basics)
-- [SPARQL implementations](http://www.w3.org/wiki/SparqlImplementations)
-- [Jena JavaDoc](http://jena.sourceforge.net/javadoc/index.html)
-- [Jena ARQ JavaDoc](http://jena.sourceforge.net/ARQ/javadoc/)
-- [Joseki](http://www.joseki.org/) - SPARQL Endpoint for Jena
-- [Scala Style Guide](https://github.com/davetron5000/scala-style/)
 
 ## Licence
 
