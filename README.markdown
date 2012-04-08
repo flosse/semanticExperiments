@@ -48,7 +48,10 @@ The following software and tools are used:
 
 ## Interesting JavaScript libraries
 
+- [rdfstore-js](https://github.com/antoniogarrote/rdfstore-js) - a great RDF store with SPARQL support
+- [rdf.js](https://github.com/webr3/rdf.js) - RDF Tooling
 - [js3](https://github.com/webr3/js3) - generates RDF out of JavaScript values and objects
+- [rdfQuery](https://github.com/alohaeditor/rdfQuery) - Javascript library for RDF-related processing
 - [Jstle](https://github.com/dnewcome/jstle) - RDF serialization language
 - [jOWL](https://code.google.com/p/jowl-plugin/) - a jQuery plugin for processing OWL, MIT, 2009
 - [RDFAuthor](https://code.google.com/p/rdfauthor/), GPLv3, 2011
@@ -60,11 +63,16 @@ The following software and tools are used:
 
 ### Graph visualization
 
+- [d3](http://mbostock.github.com/d3/)
 - [moowheel](http://labs.unwieldy.net/moowheel/)
 - [Dracula](http://www.graphdracula.net/)
 - [InfoVis Toolkit](http://thejit.org/)
 - [Protovis](http://vis.stanford.edu/protovis/)
 - [arbor.js](http://arborjs.org/)
+
+### Interesting Sites
+
+- [Strategies for Building Semantic Web Applications](http://notes.3kbo.com/)
 
 ## Build
 
