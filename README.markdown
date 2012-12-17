@@ -60,6 +60,7 @@ The following software and tools are used:
 - [sparql.js](http://www.thefigtrees.net/lee/sw/sparql.js) - JS library for processing SPARQL queries
 - [vie.js ](http://bergie.github.com/VIE/) - Library for making RDFa -annotated content on a web pages editable
 - [jquery-sparql](https://github.com/jgeldart/jquery-sparql) - a SPARQL jQuery plugin
+- [node-neo4j](https://github.com/thingdom/node-neo4j) - Neo4j graph database driver (REST API client) for Node.js
 
 ### Graph visualization
 
@@ -86,6 +87,7 @@ The following software and tools are used:
 - http://semanticweb.com/
 - [SemanticOverflow](http://answers.semanticweb.com/)
 - [Where can I learn about the semantic web](http://answers.semanticweb.com/questions/1/where-can-i-learn-about-the-semantic-web)
+- [Linked Data Patterns](http://patterns.dataincubator.org/book/)
 
 ## Build
 
