@@ -61,6 +61,7 @@ The following software and tools are used:
 - [vie.js ](http://bergie.github.com/VIE/) - Library for making RDFa -annotated content on a web pages editable
 - [jquery-sparql](https://github.com/jgeldart/jquery-sparql) - a SPARQL jQuery plugin
 - [node-neo4j](https://github.com/thingdom/node-neo4j) - Neo4j graph database driver (REST API client) for Node.js
+- [LevelGraph](https://github.com/mcollina/node-levelgraph) - A graph database built on top of LevelUp
 
 ### Graph visualization
 
