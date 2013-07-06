@@ -44,7 +44,8 @@ The following software and tools are used:
 - [JADE](http://jade.tilab.com/) - Agent platform
 - [AgentOWL](http://agentowl.sourceforge.net/) - library for RDF/OWL support in [JADE](http://jade.tilab.com/)
 - [Scala](http://www.scala-lang.org/) - Programming language for the JVM
-- [sbt](https://github.com/harrah/xsbt) - a build tool for Scala
+- [sbt](https://github.com/sbt/sbt) - a build tool for Scala
+
 
 ## Interesting JavaScript libraries
 
@@ -92,17 +93,9 @@ The following software and tools are used:
 
 ## Build
 
-For compiling JAR files [sbt](https://github.com/harrah/xsbt) is used.
-
-To install sbt globally on a Linux machine, copy the file `sbt-launch-0.7.4.jar` into
-the directory `/usr/local/lib/` and create the file `sbt` in the directory `/usr/bin/`
-with the following content:
-
-    java -Xmx1024M -XX:MaxPermSize=512M -jar /usr/local/lib/sbt-launch-0.7.4.jar "$@"
-
-Now make the script executable:
-
-    sudo chmod a+x sbt
+For compiling JAR files [sbt](https://github.com/sbt/sbt)
+([Setup](http://www.scala-sbt.org/release/docs/Getting-Started/Setup))
+ is used.
 
 To build a project change to the according directory and type `sbt` to reach the
 sbt promt. To compile the source just type
@@ -137,6 +130,12 @@ Run `sbt` and generate the eclipse project and classpath file with
     > eclipse
 
 For more information have a look at http://www.scala-ide.org/ and https://github.com/musk/SbtEclipsify
+
+### WebClient
+
+1. Install [Node.js](http://www.nodejs.org) and
+   [CoffeeScript](http://www.coffeescript.org).
+2. Compile `.coffee` files with `coffee -c *.coffee`
 
 ### API documentation
 
