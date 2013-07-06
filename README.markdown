@@ -45,6 +45,7 @@ The following software and tools are used:
 - [AgentOWL](http://agentowl.sourceforge.net/) - library for RDF/OWL support in [JADE](http://jade.tilab.com/)
 - [Scala](http://www.scala-lang.org/) - Programming language for the JVM
 - [sbt](https://github.com/sbt/sbt) - a build tool for Scala
+- [CoffeeScript](http://www.coffeescript.org) - a little language that compiles into JavaScript
 
 
 ## Interesting JavaScript libraries
