@@ -50,20 +50,20 @@ The following software and tools are used:
 
 ## Interesting JavaScript libraries
 
-- [rdfstore-js](https://github.com/antoniogarrote/rdfstore-js) - a great RDF store with SPARQL support
-- [rdf.js](https://github.com/webr3/rdf.js) - RDF Tooling
-- [js3](https://github.com/webr3/js3) - generates RDF out of JavaScript values and objects
-- [rdfQuery](https://github.com/alohaeditor/rdfQuery) - Javascript library for RDF-related processing
-- [Jstle](https://github.com/dnewcome/jstle) - RDF serialization language
+- [rdfstore-js](https://github.com/antoniogarrote/rdfstore-js) - a great RDF store with SPARQL support, 2013
+- [rdf.js](https://github.com/webr3/rdf.js) - RDF Tooling, 2011
+- [js3](https://github.com/webr3/js3) - generates RDF out of JavaScript values and objects, 2010
+- [rdfQuery](https://github.com/alohaeditor/rdfQuery) - Javascript library for RDF-related processing, 2011
+- [Jstle](https://github.com/dnewcome/jstle) - RDF serialization language, 2010
 - [jOWL](https://code.google.com/p/jowl-plugin/) - a jQuery plugin for processing OWL, MIT, 2009
 - [RDFAuthor](https://code.google.com/p/rdfauthor/), GPLv3, 2011
 - [rdf-parser](http://www.jibbering.com/rdf-parser/) - a simple RDF parser, 2006
-- [hercules](http://hercules.arielworks.net/) - framework for semantic web applications
-- [sparql.js](http://www.thefigtrees.net/lee/sw/sparql.js) - JS library for processing SPARQL queries
-- [vie.js ](http://bergie.github.com/VIE/) - Library for making RDFa -annotated content on a web pages editable
-- [jquery-sparql](https://github.com/jgeldart/jquery-sparql) - a SPARQL jQuery plugin
-- [node-neo4j](https://github.com/thingdom/node-neo4j) - Neo4j graph database driver (REST API client) for Node.js
-- [LevelGraph](https://github.com/mcollina/node-levelgraph) - A graph database built on top of LevelUp
+- [hercules](http://hercules.arielworks.net/) - framework for semantic web applications, 2008
+- [sparql.js](http://www.thefigtrees.net/lee/sw/sparql.js) - JS library for processing SPARQL queries, 2007
+- [vie.js ](http://bergie.github.com/VIE/) - Library for making RDFa -annotated content on a web pages editable, 2013
+- [jquery-sparql](https://github.com/jgeldart/jquery-sparql) - a SPARQL jQuery plugin, 2010
+- [node-neo4j](https://github.com/thingdom/node-neo4j) - Neo4j graph database driver (REST API client) for Node.js, 2013
+- [LevelGraph](https://github.com/mcollina/node-levelgraph) - A graph database built on top of LevelUp, 2013
 
 ### Graph visualization
 
